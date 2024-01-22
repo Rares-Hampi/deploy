@@ -16,6 +16,10 @@ app.use((req, res) => {
   res.status(404).send("Route doesn't exist");
 });
 
+app.use("/", (req, res) => {
+  res.send("Hello World");
+});
+
 app.listen(5500, "0.0.0.0", () => {
   console.log("Server is running");
 });
