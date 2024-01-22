@@ -5,6 +5,9 @@ import nlp
 app = Flask(__name__)
 CORS(app)
 
+@app.route("/", methods=["GET"])
+def hi():
+    return "hi"
 
 @app.route("/summarize", methods=["POST"])
 def hello():
