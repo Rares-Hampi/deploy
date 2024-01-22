@@ -16,6 +16,6 @@ app.use((req, res) => {
   res.status(404).send("Route doesn't exist");
 });
 
-app.listen(5500, () => {
-  console.log(`Server listening on port 5500`);
+app.listen(5500, "0.0.0.0", () => {
+  console.log("Server is running");
 });
