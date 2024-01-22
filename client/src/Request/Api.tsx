@@ -22,7 +22,7 @@ export async function getAnswer(question: string) {
     if (text[0] === "No keywords found") {
       return "Sorry, I did not understand your question. Please try again.";
     }
-    const response = await fetch("http://localhost:5500/ask", {
+    const response = await fetch("https://node-chat-k5ua.onrender.com/ask", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -40,10 +40,13 @@ export async function getAnswer(question: string) {
 
 export async function quiz(question: string, answer: string) {
   try {
-    const response = await axios.post("http://localhost:5500/quiz", {
-      question: question,
-      answer: answer,
-    });
+    const response = await axios.post(
+      "https://node-chat-k5ua.onrender.com/quiz",
+      {
+        question: question,
+        answer: answer,
+      }
+    );
 
     return response.data;
   } catch (error) {
@@ -53,9 +56,12 @@ export async function quiz(question: string, answer: string) {
 
 export async function searchQuest(question: string) {
   try {
-    const response = await axios.post("http://localhost:5500/suggest", {
-      question: question,
-    });
+    const response = await axios.post(
+      "https://node-chat-k5ua.onrender.com/suggest",
+      {
+        question: question,
+      }
+    );
 
     return response.data;
   } catch (error) {
