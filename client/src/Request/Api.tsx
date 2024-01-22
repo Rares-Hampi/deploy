@@ -2,9 +2,12 @@ import axios from "axios";
 
 async function Summarize(question: string) {
   try {
-    const response = await axios.post("http://127.0.0.1:5000/summarize", {
-      text: question,
-    });
+    const response = await axios.post(
+      "https://python-chat.onrender.com/summarize",
+      {
+        text: question,
+      }
+    );
 
     return response.data;
   } catch (error) {

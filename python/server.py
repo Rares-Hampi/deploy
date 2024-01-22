@@ -9,6 +9,7 @@ CORS(app)
 def hi():
     return "hi"
 
+
 @app.route("/summarize", methods=["POST"])
 def hello():
     text = request.json["text"]
@@ -18,4 +19,4 @@ def hello():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host="0.0.0.0", port=5000)
