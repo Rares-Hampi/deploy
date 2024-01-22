@@ -7,15 +7,16 @@ import Wrapper from "../components/Wraper";
 import logo from "../../public/logo.png";
 import { getAnswer, searchQuest } from "../Request/Api";
 import Alert from "../components/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Faq from "../components/Faq";
+import { useLocation } from "react-router-dom";
 
 const Chat = () => {
   const [answers, setAnswers] = useState<string[]>([]);
   const [show, setShow] = useState(false);
   const [why, setWhy] = useState<string>("");
-
   const [txt, setTxt] = useState<string>("");
+  const location = useLocation();
 
   const handleSubmit = async (text: string) => {
     const answers = await getAnswer(text);
@@ -23,21 +24,22 @@ const Chat = () => {
       answers === "Sorry, I did not understand your question. Please try again."
     ) {
       const ans = await searchQuest(text);
-
-      // put in the answers 10 random answers from the search
       const randomAnswers = ans
         .sort(() => Math.random() - Math.random())
         .slice(0, 10);
       setAnswers(randomAnswers);
       setWhy("intrebari");
-      setTxt(localStorage.getItem("copied") || "");
     } else {
       setWhy("raspuns");
       setAnswers(answers);
     }
-
+    setTxt(location.state?.copied || "");
     setShow(true);
   };
+
+  useEffect(() => {
+    setTxt(location.state?.copied || "");
+  }, [location.state?.copied]);
 
   return (
     <Wrapper>
@@ -55,7 +57,7 @@ const Chat = () => {
 
         <Formik
           initialValues={{
-            text: "",
+            text: txt,
           }}
           validationSchema={Yup.object({
             text: Yup.string().max(255).required("Text is required"),
@@ -64,8 +66,10 @@ const Chat = () => {
             if (values.text !== "" || txt !== "") {
               handleSubmit(values.text || txt);
               setShow(false);
-              values.text = "";
               setTxt("");
+              values.text = "";
+              localStorage.removeItem("copied");
+              location.state.copied = "";
             } else {
               alert("Please enter a question");
             }
@@ -83,7 +87,7 @@ const Chat = () => {
                   name="text"
                   type="text"
                   className="border-0 bg-white text-black input p-2"
-                  value={txt || formik.values.text}
+                  value={formik.values.text || txt}
                 />
               </div>
               <ErrorMessage
@@ -98,8 +102,10 @@ const Chat = () => {
                   if (formik.values.text !== "" || txt !== "") {
                     handleSubmit(formik.values.text || txt);
                     setShow(false);
-                    formik.values.text = "";
                     setTxt("");
+                    formik.values.text = "";
+                    localStorage.removeItem("copied");
+                    location.state.copied = "";
                   } else {
                     alert("Please enter a question");
                   }

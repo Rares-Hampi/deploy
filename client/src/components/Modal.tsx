@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { useNavigate } from "react-router";
 
 interface ModalProps {
   answers: string[];
@@ -11,12 +12,16 @@ interface ModalProps {
 function Alert({ answers, appear, reason }: ModalProps) {
   const [show, setShow] = useState(false);
 
+  const navigate = useNavigate();
+
   const handleClose = () => setShow(false);
 
   // function to copy the answer to the clipboard
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     localStorage.setItem("copied", text);
+    navigate("/chat", { state: { copied: text } });
+
     handleClose();
   };
 
